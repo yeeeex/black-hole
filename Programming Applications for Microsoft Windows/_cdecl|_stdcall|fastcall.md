@@ -26,11 +26,11 @@ call input   栈里实际是input的地址 (IP)<br>
 \_cdecl会产生100次add esp 4的操作，而\_stdcall只用再input末尾ret 4一次就行了,他们的压栈方式相同<br>
 <br>
 ### 关于_fastcall
-`input(1, 2, 3, 4);`
-`00B6173E　　push　　4`
-`00B61740　　push　　3`  
-`00B61742　　mov　　　edx,2` 
-`00B61747　　mov　　　ecx,1`  
+`input(1, 2, 3, 4);`<br>
+`00B6173E　　push　　4`<br>
+`00B61740　　push　　3` <br>
+`00B61742　　mov　　　edx,2` <br>
+`00B61747　　mov　　　ecx,1`  <br>
 `00B6174C　　call　　input (0B6107Dh)`  _fastcall其余和_stdcall一样，只是会将最右两个参数扔进<br>
 寄存器edc,ecx增加传参速度
 
