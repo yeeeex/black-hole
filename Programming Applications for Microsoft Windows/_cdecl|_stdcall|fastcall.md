@@ -23,7 +23,7 @@ call input   栈里实际是input的地址 (IP)<br>
 只有主调函数参知道是压了一个栈进去，而不是两个<br>
 <br>
 然后是可执行文件大小的问题，\_cdecl的可执行文件会比\_stdcall大因为假设main里对input函数调用1000次<br>
-\_cdecl会产生100次add esp 4的操作，而\_stdcall只用再input末尾ret 4一次就行了,他们的压栈方式相同<br>
+\_cdecl会产生1000次add esp 4的操作，而\_stdcall只用再input末尾ret 4一次就行了,他们的压栈方式相同<br>
 <br>
 ### 关于_fastcall
 `input(1, 2, 3, 4);`<br>
