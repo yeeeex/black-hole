@@ -19,5 +19,10 @@
 但是多个进程创建了文件映射对象时，却能极大的提高效率
 
 
-**关于CreateFileMapping API调用时遇到的一些问题，如果error返回的是5，很可能是在VS上debug或者运行需要管理员**<br>
-**是运行程序的管理员权限，而不是VS的管理员,这个可以在项目属性->链接器->清单文件->UAC运行级别上设置**
+
+![image](https://github.com/yeeeex/black-hole/blob/master/Programming%20Applications%20for%20Microsoft%20Windows/pictures/5.png)<br>
+**在这段代码中发现如果将CreateFile的第二个参数设置为STANDARD_RIGHTS_ALL，则需要管理员云权限才能使CF函数跳过error1，但是在第二**<br>
+**个函数，即CreateFileMapping时，依然GetLastError()会返回5，即出现了权限问题，但是如果CF函数里填GENERIC_READ之类的不论是CF函数**<br>
+**还是CFM函数，不论是管理员权限，还是普通权限都能够运行，我推测的原因是，STANDARD_RIGHT_ALL里包含了五种标准控制权限，而GENERIC_READ**<br>
+**是通用控制权限，CF和CFM权限之间的矛盾导致了这个问题，标准控制权限需要管理员运行，但是标准控制权限和CFM里的权限矛盾了。明天我将试着**<br>
+**对SECURITY_ATTRIBUTES进行初始化来测试
