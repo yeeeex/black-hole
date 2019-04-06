@@ -22,7 +22,7 @@ h(x)其实是预测的P(y=1|x;θ)与P(y=0|x;θ),下面给出ng课上分类的几
 关于这个Cost函数，如果y本身为1但是预测结果为接近0,COST的值将会非常的大，所以模型会受到较大的惩罚，如果y本身为0但是<br>
 预测结果为1，同理，我们带入参数即可验证<br>
 关于J(Θ)，我们可以改写为如下形式:<br>
-<img src="https://latex.codecogs.com/gif.latex?J(\Theta)=\frac{1}{m}[\sum_{i=1}^{m}y^{(i)}log(h_\Theta(x^{(i)}))&plus;(1-y^{(i)})log(1-h_\Theta(x^{(i)}))]" title="J(\Theta)=\frac{1}{m}[\sum_{i=1}^{m}y^{(i)}log(h_\Theta(x^{(i)}))+(1-y^{(i)})log(1-h_\Theta(x^{(i)}))]" />
+<img src="https://latex.codecogs.com/gif.latex?J(\Theta)=\frac{-1}{m}[\sum_{i=1}^{m}y^{(i)}log(h_\Theta(x^{(i)}))&plus;(1-y^{(i)})log(1-h_\Theta(x^{(i)}))]" title="J(\Theta)=\frac{-1}{m}[\sum_{i=1}^{m}y^{(i)}log(h_\Theta(x^{(i)}))+(1-y^{(i)})log(1-h_\Theta(x^{(i)}))]" />
 <br>
 也更方便求导，然后我们同样要min j(Θ)，当可以求导以后，便用梯度下降的方法下降参数即可，同时ng的视频中还提到了 conjugate gradient<br>
 BFGS,L-BFGS等高阶优化方法，等我以后来填坑<br>
@@ -37,4 +37,13 @@ BFGS,L-BFGS等高阶优化方法，等我以后来填坑<br>
 如何减少过拟合呢？第一个方法是减少特征值的数量，将范围有重叠的特征值删去，二是减小参数θ的值，这样可以让曲线看起来平滑些<br>
 第二种适用于每个特征都很重要无法删除的情况<br>
 
-**之前我一直没想通COST函数究竟怎么来了，看了西瓜书以后我来补完
+**之前我一直没想通COST函数究竟怎么来了，看了西瓜书以后我来补完**<br>
+<a href="https://www.codecogs.com/eqnedit.php?latex=z=\frac{1}{1&plus;e^{-\Theta^TX}}&space;\rightarrow&space;ln\frac{z}{1-z}=\Theta^TX" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z=\frac{1}{1&plus;e^{-\Theta^TX}}&space;\rightarrow&space;ln\frac{z}{1-z}=\Theta^TX" title="z=\frac{1}{1+e^{-\Theta^TX}} \rightarrow ln\frac{z}{1-z}=\Theta^TX" /></a>
+<br>
+因为z是求出来的概率，z/(1-z)实际上是样本为1比上样本为0的比率，所以又可以写为特定x条件下，y为概率与y为0概率比:<br>
+<a href="https://www.codecogs.com/eqnedit.php?latex=ln\frac{z}{1-z}=ln\frac{P(y=1|x)}{P(y=0|x)}=\Theta^TX\\&space;\therefore&space;P(y=1|x)=\frac{\Theta^TX}{1&plus;\Theta^TX},P(y=0|x)=\frac{1}{1&plus;\Theta^TX}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?ln\frac{z}{1-z}=ln\frac{P(y=1|x)}{P(y=0|x)}=\Theta^TX\\&space;\therefore&space;P(y=1|x)=\frac{\Theta^TX}{1&plus;\Theta^TX},P(y=0|x)=\frac{1}{1&plus;\Theta^TX}" title="ln\frac{z}{1-z}=ln\frac{P(y=1|x)}{P(y=0|x)}=\Theta^TX\\ \therefore P(y=1|x)=\frac{\Theta^TX}{1+\Theta^TX},P(y=0|x)=\frac{1}{1+\Theta^TX}" /></a>
+<br>
+然后我们可以根据极大似然估计法，对于已知的x,y，估计出能使他们以最大概率成立的Θ，我们有如下估计函数：
+<a href="https://www.codecogs.com/eqnedit.php?latex=L(\Theta)=\prod_{i=1}^{m}P(y_i|x_i;\Theta&space;)\\&space;\because&space;\prod_{i=1}^{m}P(y_i|x_i;\Theta)=P(y_i|x_i;\Theta&space;)^{1-y}P(y_i|x_i;\Theta&space;)^{1-y_i}&space;\\&space;\therefore&space;\zeta&space;(\Theta&space;)=\sum_{i=1}^{m}lnP(y_i|x_i;\Theta&space;)&space;\\&space;\rightarrow&space;\zeta&space;(\Theta&space;)=\sum_{i=1}^{m}y_iln(P(y_i|x_i,b))&plus;(1-y_i)ln(1-(P(y_i|x_i,b))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?L(\Theta)=\prod_{i=1}^{m}P(y_i|x_i;\Theta&space;)\\&space;\because&space;\prod_{i=1}^{m}P(y_i|x_i;\Theta)=P(y_i|x_i;\Theta&space;)^{1-y}P(y_i|x_i;\Theta&space;)^{1-y_i}&space;\\&space;\therefore&space;\zeta&space;(\Theta&space;)=\sum_{i=1}^{m}lnP(y_i|x_i;\Theta&space;)&space;\\&space;\rightarrow&space;\zeta&space;(\Theta&space;)=\sum_{i=1}^{m}y_iln(P(y_i|x_i,b))&plus;(1-y_i)ln(1-(P(y_i|x_i,b))" title="L(\Theta)=\prod_{i=1}^{m}P(y_i|x_i;\Theta )\\ \because \prod_{i=1}^{m}P(y_i|x_i;\Theta)=P(y_i|x_i;\Theta )^{1-y}P(y_i|x_i;\Theta )^{1-y_i} \\ \therefore \zeta (\Theta )=\sum_{i=1}^{m}lnP(y_i|x_i;\Theta ) \\ \rightarrow \zeta (\Theta )=\sum_{i=1}^{m}y_iln(P(y_i|x_i,b))+(1-y_i)ln(1-(P(y_i|x_i,b))" /></a>
+
+
